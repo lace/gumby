@@ -15,5 +15,11 @@ def init():
 def test():
     execute('nose2')
 
+@cli.command()
+def upload():
+    execute('rm -rf dist/')
+    execute('python setup.py sdist')
+    execute('twine upload dist/*')
+
 if __name__ == '__main__':
     cli()

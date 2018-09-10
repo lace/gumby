@@ -1,6 +1,10 @@
 gumby
 =====
 
+[![version](https://img.shields.io/pypi/v/gumby.svg?style=flat-square)][pypi]
+
+[pypi]: https://pypi.org/project/gumby/
+
 Stretch polygonal meshes in segments along an axis.
 
 Installation

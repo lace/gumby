@@ -4,9 +4,6 @@ from setuptools import setup, find_packages
 with open('README.md') as f:
     readme = f.read()
 
-with open('LICENSE') as f:
-    license = f.read()
-
 with open('requirements.txt') as f:
     install_requires = f.read()
 
@@ -19,7 +16,6 @@ setup(
     author='Metabolize',
     author_email='github@paulmelnikow.com',
     url='https://github.com/metabolize/gumby',
-    license=license,
     packages=find_packages(),
     install_requires=install_requires,
     classifiers=[
