@@ -22,6 +22,7 @@ def stretch_segments_along_y(mesh, landmarks, segments):
             landmarks[top][1] + cumulative_delta)
         stretch_segment_along_y(mesh=mesh, in_range=in_range, delta=delta)
         cumulative_delta += delta
+    return mesh
 
 def main():
     """
@@ -29,7 +30,6 @@ def main():
     """
     from lace.mesh import Mesh
     from lace.serialization import meshlab_pickedpoints
-    from blmath.numerics import vx
     from .path import relative_to_project
     from .landmarks import print_landmarks
 

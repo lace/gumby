@@ -1,6 +1,5 @@
 -r requirements.txt
 
 nose2 == 0.5.0
-click >= 6.0,<7.0
 executor >= 20.0
-
+pyyaml
