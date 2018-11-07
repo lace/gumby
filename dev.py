@@ -25,9 +25,11 @@ def python_source_files():
 def cli():
     pass
 
+
 @cli.command()
 def init():
     execute("pip install --upgrade -r requirements_dev.txt")
+
 
 @cli.command()
 def test():
@@ -51,10 +53,11 @@ def black_check():
 
 @cli.command()
 def upload():
-    execute('rm -rf dist/')
-    execute('python setup.py sdist')
-    execute('twine upload dist/*')
+    execute("rm -rf dist/")
+    execute("python setup.py sdist")
+    execute("twine upload dist/*")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     os.chdir(os.path.abspath(os.path.dirname(__file__)))
     cli()
