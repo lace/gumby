@@ -46,8 +46,8 @@ python -m gumby.cli run recipe.yml stretched.obj
 Contribute
 ----------
 
-- Issue Tracker: https://github.com/metabolize/gumby/issues
-- Source Code: https://github.com/metabolize/gumby
+- Issue Tracker: https://github.com/lace/gumby/issues
+- Source Code: https://github.com/lace/gumby
 
 Pull requests welcome!
 
