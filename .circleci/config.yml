@@ -10,6 +10,12 @@ jobs:
       - checkout
 
       - run:
+          name: Install container dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -qq libboost-dev
+
+      - run:
           name: Install python dependencies
           # set -o pipefail; pip .. | cat is used to disable the progress bar.
           command: |
