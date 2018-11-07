@@ -3,4 +3,4 @@ metabolace == 1.1.8.dev1
 metablmath
 click >= 6.0,<7.0
 pytweening >= 1.0.3, < 2
-vx >= 0.2.0
+vector_shortcuts >= 0.2.0
