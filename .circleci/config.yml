@@ -13,7 +13,7 @@ jobs:
           name: Install container dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -qq libboost-dev
+            sudo apt-get install -qq libsuitesparse-dev libboost-dev
 
       - run:
           name: Install python dependencies
