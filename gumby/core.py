@@ -78,25 +78,6 @@ def tug(mesh, groups, axis, reference_point, travel, tug_range, easing, anchor_p
         else:
             return 0.0
 
-    def dbg(s):
-        print("tweened_sproj({}): {}".format(s, tweened_sproj(s)))
-
-    for i in range(100):
-        dbg(-i/100.)
-
-
-    # dbg(sproj_start)
-    # dbg(0.5*(sproj_reference_point + sproj_start))
-    # dbg(sproj_reference_point)
-    # dbg(0.5*(sproj_end + sproj_reference_point))
-    # dbg(sproj_end)
-
-    # import sys
-    # sys.exit(1)
-
-    # import pdb
-    # pdb.set_trace()
-
     sproj_points = scalar_project_to_line(mesh.v, centroid, axis)
     travel_for_each_point = travel * np.array([tweened_sproj(s) for s in sproj_points])
 
