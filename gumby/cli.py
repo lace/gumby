@@ -1,5 +1,6 @@
 """
 python -m gumby.cli landmarks examples/vitra/vitra.yml
+python -m gumby.cli run examples/vitra/vitra.yml stretched.obj
 """
 
 import click
