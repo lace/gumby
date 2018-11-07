@@ -25,38 +25,95 @@ def stretch_segments_along_y(mesh, landmarks, segments):
         cumulative_delta += delta
     return mesh
 
+def principal_components(coords):
+    import numpy as np
+
+    mean = np.mean(coords, axis=0)
+    _, _, result = np.linalg.svd(coords - mean)
+    return result
+
+def major_axis(coords):
+    return principal_components(coords)[0]
+
+def project_to_line(points, point_on_line, direction):
+    import vx
+
+    return point_on_line + vx.proj(points - point_on_line, direction)
+
+def scalar_project_to_line(points, point_on_line, direction):
+    import vx
+
+    return vx.sproj(points - point_on_line, direction)
+
+def tug(mesh, groups, axis, reference_point, travel, tug_range, easing, anchor_point):
+    # groups: later
+    # anchor_point: later
+    centroid = mesh.centroid
+
+    proj_reference_point = project_to_line(reference_point, centroid, axis)
+    proj_start = project_to_line(tug_range[0], centroid, axis)
+    proj_end = project_to_line(tug_range[1], centroid, axis)
+
+    sproj_reference_point = scalar_project_to_line(proj_reference_point, centroid, axis)
+    sproj_start = scalar_project_to_line(proj_start, centroid, axis)
+    sproj_end = scalar_project_to_line(proj_end, centroid, axis)
+
+    if sproj_start > sproj_end:
+        raise ValueError('Tug range is backwards relative to axis')
+    if sproj_reference_point < sproj_start or sproj_reference_point > sproj_end:
+        raise ValueError('Reference point is not within tug range')
+
+    if isinstance(easing, tuple):
+        [easing_attack, easing_decay] = easing
+    else:
+        easing_attack = easing_decay = easing
+
+    def tweened_sproj(s):
+        if s < sproj_reference_point:
+            t = (s - sproj_start) / (sproj_reference_point - sproj_start)
+            return easing_attack(t)
+        elif s > sproj_reference_point:
+            t = (s - sproj_reference_point) / (sproj_end - sproj_reference_point)
+            return easing_decay(t)
+        else:
+            return 1.0
+
+    sproj_points = scalar_project_to_line(mesh.v, centroid, axis)
+    travel = np.array([tweened_sproj(s) for s in sproj_points])
+
+    proj_points = project_to_line(mesh.v, centroid, axis)
+    from_axis_to_points = mesh.v - centroid - proj_points
+
+    mesh.v = mesh.v + travel * from_axis_to_points
 
 def main():
     """
     python -m gumby.core
     """
     from lace.mesh import Mesh
-    from lace.serialization import meshlab_pickedpoints
+    import pytweening
     from .path import relative_to_project
-    from .landmarks import print_landmarks
 
-    original_mesh = Mesh(filename=relative_to_project("examples/vitra/vitra.obj"))
+    original_mesh = Mesh(filename=relative_to_project("glass-bottle/glass_bottle.obj"))
     # Fix crash in write_obj.
     del original_mesh.segm
     mesh = original_mesh.copy()
 
-    landmarks = meshlab_pickedpoints.load(
-        relative_to_project("examples/vitra/vitra.pp")
-    )
-    print_landmarks(landmarks, units="cm", precision=1)
+    tug(
+        mesh=mesh,
+        groups=None,
+        axis=vx.basis.y,
+        reference_point=np.array([0.0, 0.375, 0.0]),
+        travel=0.1,
+        tug_range=np.array([[0.0, 0.10, 0.0], [0.0, 0.65, 0.0]],
+        easing=pytweening.easeInOutSine,
+        anchor_points=None)
 
-    segments = [
-        ("leg seam", "knee bottom", 20),
-        ("knee bottom", "knee top", 10),
-        ("knee top", "leg top", 10),
-        ("back middle", "back top", 50),
-    ]
-    stretch_segments_along_y(mesh=mesh, landmarks=landmarks, segments=segments)
 
     mesh.show()
     original_mesh.show()
 
-    mesh.write_obj("stretched.obj")
+    mesh.write_obj("tugged.obj")
 
 
 if __name__ == "__main__":
