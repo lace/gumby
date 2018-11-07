@@ -79,7 +79,7 @@ def tug(mesh, groups, axis, reference_point, travel, tug_range, easing, anchor_p
             return 0.0
 
     v_indices = mesh.vertex_indices_in_segments(groups)
-    points = mesh.v[indices]
+    points = mesh.v[v_indices]
 
     sproj_points = scalar_project_to_line(points, centroid, axis)
     travel_for_each_point = travel * np.array([tweened_sproj(s) for s in sproj_points])
