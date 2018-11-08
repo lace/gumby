@@ -1,6 +1,7 @@
 from __future__ import print_function
-import vx
 import numpy as np
+import pytweening
+import vx
 
 def stretch_segment_along_y(mesh, in_range, delta):
     height = mesh.v[:, 1]
@@ -96,6 +97,51 @@ def tug(mesh, v_indices, centroid, axis, reference_point, travel, tug_range, eas
 
     mesh.v[v_indices] = new_points
 
+def tug_along(mesh, v_indices, direction, reference_point, travel, tug_range, easing):
+    origin = np.array([0., 0., 0.])
+
+    direction = vx.normalize(direction)
+
+    proj_reference_point = project_to_line(reference_point, origin, direction)
+    proj_start = project_to_line(tug_range[0], origin, direction)
+    proj_end = project_to_line(tug_range[1], origin, direction)
+
+    sproj_reference_point = scalar_project_to_line(proj_reference_point, origin, direction)
+    sproj_start = scalar_project_to_line(proj_start, origin, direction)
+    sproj_end = scalar_project_to_line(proj_end, origin, direction)
+
+    if sproj_start > sproj_end:
+        raise ValueError('Tug range is backwards relative to axis')
+    if sproj_reference_point < sproj_start or sproj_reference_point > sproj_end:
+        raise ValueError('Reference point is not within tug range')
+
+    if isinstance(easing, tuple):
+        [easing_attack, easing_decay] = easing
+    else:
+        easing_attack = easing_decay = easing
+
+    def tweened_sproj(s):
+        if s < sproj_start:
+            return 0.0
+        elif s < sproj_reference_point:
+            t = (s - sproj_start) / (sproj_reference_point - sproj_start)
+            return easing_attack(t)
+        elif s == sproj_reference_point:
+            return 1.0
+        elif s > sproj_reference_point and s <= sproj_end:
+            t = (s - sproj_end) / (sproj_reference_point - sproj_end)
+            return easing_decay(t)
+        else:
+            return 0.0
+
+    points = mesh.v[v_indices]
+
+    sproj_points = scalar_project_to_line(points, origin, direction)
+    travel_for_each_point = travel * np.array([tweened_sproj(s) for s in sproj_points])
+
+    new_points = points + travel_for_each_point.reshape(-1, 1) * direction
+
+    mesh.v[v_indices] = new_points
 
 def main():
     """
