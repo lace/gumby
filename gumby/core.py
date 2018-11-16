@@ -1,7 +1,7 @@
 from __future__ import print_function
 import numpy as np
 import pytweening
-import vx
+import vg
 
 def stretch_segment_along_y(mesh, in_range, delta):
     height = mesh.v[:, 1]
@@ -37,10 +37,10 @@ def major_axis(coords):
     return principal_components(coords)[0]
 
 def project_to_line(points, point_on_line, direction):
-    return point_on_line + vx.proj(points - point_on_line, direction)
+    return point_on_line + vg.proj(points - point_on_line, direction)
 
 def scalar_project_to_line(points, point_on_line, direction):
-    return vx.sproj(points - point_on_line, direction)
+    return vg.sproj(points - point_on_line, direction)
 
 def tug(mesh, v_indices, centroid, axis, reference_point, travel, tug_range, easing=pytweening.easeOutSine, anchor_point=None):
     if v_indices is None:
@@ -83,14 +83,14 @@ def tug(mesh, v_indices, centroid, axis, reference_point, travel, tug_range, eas
     travel_for_each_point = travel * np.array([tweened_sproj(s) for s in sproj_points])
 
     proj_points = project_to_line(points, centroid, axis)
-    from_axis_to_points = vx.normalize(points - proj_points)
+    from_axis_to_points = vg.normalize(points - proj_points)
 
     new_points = points + travel_for_each_point.reshape(-1, 1) * from_axis_to_points
 
     if anchor_point is not None:
         sproj_anchor_point = scalar_project_to_line(anchor_point, centroid, axis)
         proj_anchor_point = project_to_line(anchor_point, centroid, axis)
-        from_axis_to_anchor_point = vx.normalize(anchor_point - proj_anchor_point)
+        from_axis_to_anchor_point = vg.normalize(anchor_point - proj_anchor_point)
         new_anchor_point = anchor_point + travel * tweened_sproj(sproj_anchor_point) * from_axis_to_anchor_point
         correction = (new_anchor_point - anchor_point) / tweened_sproj(sproj_anchor_point)
         new_points -= correction * np.array([tweened_sproj(s) for s in sproj_points]).reshape(-1, 1)
@@ -100,7 +100,7 @@ def tug(mesh, v_indices, centroid, axis, reference_point, travel, tug_range, eas
 def tug_along(mesh, v_indices, direction, reference_point, travel, tug_range, easing):
     origin = np.array([0., 0., 0.])
 
-    direction = vx.normalize(direction)
+    direction = vg.normalize(direction)
 
     proj_reference_point = project_to_line(reference_point, origin, direction)
     proj_start = project_to_line(tug_range[0], origin, direction)
@@ -160,7 +160,7 @@ def main():
     tug(mesh=mesh,
         v_indices=None,
         centroid=mesh.centroid,
-        axis=vx.basis.y,
+        axis=vg.basis.y,
         reference_point=np.array([0.0, 0.375, 0.0]),
         travel=0.1,
         tug_range=np.array([[0.0, 0.10, 0.0], [0.0, 0.65, 0.0]]))
