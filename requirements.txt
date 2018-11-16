@@ -1,4 +1,4 @@
 numpy
 metabolace == 1.1.8.dev1
 metablmath
-click >= 6.0,<7.0
+click >=6.0,<8.0
