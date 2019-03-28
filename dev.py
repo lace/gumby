@@ -18,7 +18,12 @@ def nose_cmd():
 def python_source_files():
     import glob
 
-    return glob.glob("*.py") + ["gumby/"]
+    include_paths = glob.glob("*.py") + glob.glob("gumby/**/*.py")
+
+    # TODO: Use flake8; argh.
+    exclude_paths = ["gumby/__init__.py"]
+
+    return [x for x in include_paths if x not in exclude_paths]
 
 
 @click.group()
