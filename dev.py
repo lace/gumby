@@ -5,24 +5,11 @@ import click
 from executor import execute
 
 
-def nose_cmd():
-    # More reliably locate this command when more than one Python are
-    # installed.
-    try:
-        execute("nose2-2.7 --help", capture=True)
-        return "nose2-2.7"
-    except:
-        return "nose2"
-
-
 def python_source_files():
     import glob
 
     include_paths = glob.glob("*.py") + glob.glob("gumby/**/*.py")
-
-    # TODO: Use flake8; argh.
-    exclude_paths = ["gumby/__init__.py"]
-
+    exclude_paths = []
     return [x for x in include_paths if x not in exclude_paths]
 
 
@@ -38,12 +25,12 @@ def init():
 
 @cli.command()
 def test():
-    execute(nose_cmd())
+    raise NotImplementedError("No tests")
 
 
 @cli.command()
 def lint():
-    execute("pyflakes", *python_source_files())
+    execute("flake8", *python_source_files())
 
 
 @cli.command()
