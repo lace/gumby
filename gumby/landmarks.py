@@ -1,6 +1,3 @@
-from __future__ import print_function
-
-
 def get_height(v):
     return v[1]
 

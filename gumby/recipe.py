@@ -4,6 +4,7 @@ class Recipe(object):
         example recipe:
 
         mesh: examples/vitra/vitra.obj
+        triangulate: false
         landmarks: examples/vitra/vitra.pp
         segments:
           - ['leg seam', 'knee bottom', 20]
@@ -14,23 +15,21 @@ class Recipe(object):
         self.mesh_path = recipe["mesh"]
         self.landmarks_path = recipe["landmarks"]
         self.segments = recipe["segments"]
+        self.triangulate = recipe.get("triangulate", False)
 
     @classmethod
     def load(cls, recipe_path):
         import yaml
 
         with open(recipe_path, "r") as f:
-            recipe_data = yaml.load(f)
+            recipe_data = yaml.safe_load(f)
         return Recipe(recipe_data)
 
     @property
     def source_mesh(self):
-        from lace.mesh import Mesh
+        import lacecore
 
-        mesh = Mesh(filename=self.mesh_path)
-        # Fix crash in write_obj.
-        del mesh.segm
-        return mesh
+        return lacecore.load_obj(self.mesh_path, triangulate=self.triangulate)
 
     @property
     def landmarks(self):
@@ -48,14 +47,15 @@ class Recipe(object):
 
 def main():
     """
-    python -m gumby.recipe
+    python3 -m gumby.recipe
     """
     from .path import relative_to_project
 
     recipe = Recipe.load(relative_to_project("examples/vitra/vitra.yml"))
     result = recipe.run()
-    result.write_obj("stretched.obj")
-    result.show()
+    out_mesh = "stretched.obj"
+    result.write_obj(out_mesh)
+    print(f"Wrote {out_mesh}")
 
 
 if __name__ == "__main__":

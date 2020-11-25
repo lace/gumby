@@ -16,8 +16,6 @@ Stretch polygonal meshes in segments along an axis.
 Installation
 ------------
 
-Requires Python 2.7.
-
 ```sh
 pip install gumby
 ```
@@ -40,7 +38,7 @@ segments:
 Run it:
 
 ```sh
-python -m gumby.cli run recipe.yml stretched.obj
+python3 -m gumby.cli run recipe.yml stretched.obj
 ```
 
 Contribute

@@ -1,42 +1,6 @@
 version: 2
 jobs:
-  # python2:
-  #   docker:
-  #     - image: circleci/python:2
-
-  #   steps:
-  #     - checkout
-
-  #     - run:
-  #         name: Install container dependencies
-  #         command: |
-  #           sudo apt-get update
-  #           sudo apt-get install -qq libsuitesparse-dev libboost-dev
-
-  #     - run:
-  #         name: Install python dependencies
-  #         # set -o pipefail; pip .. | cat is used to disable the progress bar.
-  #         command: |
-  #           mkdir -p venv
-  #           virtualenv venv
-  #           . venv/bin/activate
-  #           set -o pipefail; pip install --upgrade 'numpy>=1.10.1' | cat
-  #           set -o pipefail; pip install --upgrade -r requirements_dev.txt | cat
-
-  #     - run:
-  #         name: Show versions
-  #         command: |
-  #           . venv/bin/activate
-  #           pip freeze
-
-  #     - run:
-  #         name: Run tests
-  #         when: always
-  #         command: |
-  #           . venv/bin/activate
-  #           ./dev.py test
-
-  python3:
+  lint:
     docker:
       - image: circleci/python:3.7
 
@@ -49,8 +13,7 @@ jobs:
             mkdir -p venv
             virtualenv venv
             . venv/bin/activate
-            set -o pipefail; pip install --upgrade 'numpy>=1.10.1' | cat
-            set -o pipefail; pip install --upgrade -r requirements_dev_py3.txt | cat
+            set -o pipefail; pip install --upgrade -r requirements_dev.txt | cat
 
       - run:
           name: Show versions
@@ -60,14 +23,33 @@ jobs:
 
       - run:
           name: Check lint
-          when: always
           command: |
             . venv/bin/activate
             ./dev.py lint
 
+  format:
+    docker:
+      - image: circleci/python:3.7
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install python dependencies
+          command: |
+            mkdir -p venv
+            virtualenv venv
+            . venv/bin/activate
+            set -o pipefail; pip install --upgrade -r requirements_dev.txt | cat
+
+      - run:
+          name: Show versions
+          command: |
+            . venv/bin/activate
+            pip freeze
+
       - run:
           name: Check code format
-          when: always
           command: |
             . venv/bin/activate
             ./dev.py black-check
@@ -77,8 +59,8 @@ workflows:
 
   on-commit:
     jobs:
-      # - python2
-      - python3
+      - lint
+      - format
 
   daily:
     triggers:
@@ -86,7 +68,7 @@ workflows:
           cron: "0 17 * * *"
           filters:
             branches:
-              only: master
+              only: main
     jobs:
-      # - python2
-      - python3
+      - lint
+      - format
