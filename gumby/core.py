@@ -41,7 +41,6 @@ def main():
     """
     python3 -m gumby.core
     """
-    import lacecore
     import meshlab_pickedpoints
     from .path import relative_to_project
     from .landmarks import print_landmarks
