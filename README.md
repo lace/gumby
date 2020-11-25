@@ -27,6 +27,8 @@ Create a recipe:
 
 ```yml
 mesh: examples/vitra/vitra.obj
+# For meshes with mixed arities, specify `triangulate: true`.
+# triangulate: true
 landmarks: examples/vitra/vitra.pp
 segments:
   - ['leg seam', 'knee bottom', 20]
