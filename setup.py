@@ -6,7 +6,7 @@ def load(filename):
 
 
 version_info = {}
-exec(load("werkit/package_version.py"), version_info)
+exec(load("gumby/package_version.py"), version_info)
 
 setup(
     name="gumby",
