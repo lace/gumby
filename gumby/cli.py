@@ -1,6 +1,6 @@
 """
-python -m gumby.cli landmarks examples/vitra/vitra.yml
-python -m gumby.cli run examples/vitra/vitra.yml stretched.obj
+python3 -m gumby.cli landmarks examples/vitra/vitra.yml
+python3 -m gumby.cli run examples/vitra/vitra.yml stretched.obj
 """
 
 import click
@@ -33,7 +33,7 @@ def run(recipe, output_path):
     """
     recipe_obj = Recipe.load(recipe)
     mesh = recipe_obj.run()
-    mesh.write(output_path)
+    mesh.write_obj(output_path)
 
 
 if __name__ == "__main__":

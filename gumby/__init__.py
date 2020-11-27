@@ -1,3 +1,2 @@
 from .core import *
-
-__version__ = "0.4.0"
+from .package_version import __version__  # noqa: F401

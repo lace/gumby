@@ -16,8 +16,6 @@ Stretch polygonal meshes in segments along an axis.
 Installation
 ------------
 
-Requires Python 2.7.
-
 ```sh
 pip install gumby
 ```
@@ -29,6 +27,8 @@ Create a recipe:
 
 ```yml
 mesh: examples/vitra/vitra.obj
+# For meshes with mixed arities, specify `triangulate: true`.
+# triangulate: true
 landmarks: examples/vitra/vitra.pp
 segments:
   - ['leg seam', 'knee bottom', 20]
@@ -40,7 +40,7 @@ segments:
 Run it:
 
 ```sh
-python -m gumby.cli run recipe.yml stretched.obj
+python3 -m gumby.cli run recipe.yml stretched.obj
 ```
 
 Contribute
