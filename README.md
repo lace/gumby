@@ -1,10 +1,10 @@
 gumby
 =====
 
-[![version](https://img.shields.io/pypi/v/gumby.svg?style=flat-square)][pypi]
-[![license](https://img.shields.io/pypi/l/gumby.svg?style=flat-square)][pypi]
-[![build](https://img.shields.io/circleci/project/github/lace/gumby/master.svg?style=flat-square)][build]
-[![code style](https://img.shields.io/badge/code%20style-black-black.svg?style=flat-square)][black]
+[![version](https://img.shields.io/pypi/v/gumby?style=flat-square)][pypi]
+[![license](https://img.shields.io/pypi/l/gumby?style=flat-square)][pypi]
+[![build](https://img.shields.io/circleci/project/github/lace/gumby/master?style=flat-square)][build]
+[![code style](https://img.shields.io/badge/code%20style-black-black?style=flat-square)][black]
 
 Stretch polygonal meshes in segments along an axis.
 
@@ -50,11 +50,6 @@ Contribute
 - Source Code: https://github.com/lace/gumby
 
 Pull requests welcome!
-
-Support
--------
-
-If you are having issues, please let me know.
 
 
 License

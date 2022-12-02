@@ -1,58 +1,54 @@
-version: 2
+version: 2.1
+
+with_python: &with_python
+  docker:
+    - image: cimg/python:3.9
+
+install_poetry: &install_poetry
+  run:
+    name: Install Poetry
+    command: |
+      pip install poetry==1.2.2
+      poetry --version
+
+install_python_deps: &install_python_deps
+  run:
+    name: Install python dependencies
+    command: poetry install --no-ansi --no-interaction
+
+show_versions: &show_versions
+  run:
+    name: Show versions
+    command: poetry show
+
 jobs:
   lint:
-    docker:
-      - image: cimg/python:3.9
+    <<: *with_python
 
     steps:
       - checkout
 
-      - run:
-          name: Install python dependencies
-          command: |
-            mkdir -p venv
-            virtualenv venv
-            . venv/bin/activate
-            set -o pipefail; pip install --upgrade -r requirements_dev.txt | cat
-
-      - run:
-          name: Show versions
-          command: |
-            . venv/bin/activate
-            pip freeze
+      - *install_poetry
+      - *install_python_deps
+      - *show_versions
 
       - run:
           name: Check lint
-          command: |
-            . venv/bin/activate
-            ./dev.py lint
+          command: ./dev.py lint
 
   format:
-    docker:
-      - image: cimg/python:3.9
+    <<: *with_python
 
     steps:
       - checkout
 
-      - run:
-          name: Install python dependencies
-          command: |
-            mkdir -p venv
-            virtualenv venv
-            . venv/bin/activate
-            set -o pipefail; pip install --upgrade -r requirements_dev.txt | cat
-
-      - run:
-          name: Show versions
-          command: |
-            . venv/bin/activate
-            pip freeze
+      - *install_poetry
+      - *install_python_deps
+      - *show_versions
 
       - run:
           name: Check code format
-          command: |
-            . venv/bin/activate
-            ./dev.py black-check
+          command: ./dev.py black-check
 
 workflows:
   version: 2
