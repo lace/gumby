@@ -1,4 +1,0 @@
-click >=6.0,<9.0
-lacecore[obj] ==3.0.0a1
-meshlab-pickedpoints ==3.0.0
-numpy
