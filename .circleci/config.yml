@@ -14,7 +14,7 @@ install_poetry: &install_poetry
 install_python_deps: &install_python_deps
   run:
     name: Install python dependencies
-    command: poetry install --no-ansi --no-interaction --extras cli
+    command: poetry install --no-ansi --no-interaction
 
 show_versions: &show_versions
   run:
