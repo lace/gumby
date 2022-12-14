@@ -1,6 +1,7 @@
 import lacecore
 import numpy as np
 
+__all__ = ["stretch_segment_along_y", "stretch_segments_along_y"]
 
 def stretch_segment_along_y(mesh, in_range, delta):
     height = mesh.v[:, 1]

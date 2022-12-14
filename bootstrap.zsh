@@ -8,5 +8,4 @@ python -m venv .venv
 
 echo 'Installing packages'
 . .venv/bin/activate
-# Install the extras specified in `./dev.py install`.
-./dev.py install
+poetry install
